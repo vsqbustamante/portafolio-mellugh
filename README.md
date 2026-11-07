@@ -1,6 +1,7 @@
 # portafolio-mellugh
 
-Este es el repositorio del Portafolio de la persona que hace más felices mis días <3
+Este es el repositorio del Portafolio esta dedicada a la mujer que nunca me hace dejar de soñar <3
+
 
 Portafolio de **Melissa Villatoro (@mellugh)**, editora y creadora de contenido. Presenta su trayectoria, servicios, proyectos de videografía y fotografía, y permite iniciar una conversación por correo o Instagram.
 
