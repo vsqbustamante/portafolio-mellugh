@@ -614,6 +614,7 @@ nav a:hover {
 }
 
 .track {
+  --svc-width: min(350px, 80vw);
   display: flex;
   gap: 16px;
   overflow-x: auto;
@@ -622,12 +623,16 @@ nav a:hover {
   overscroll-behavior-x: contain;
   -webkit-overflow-scrolling: touch;
   cursor: grab;
-  padding: 10px max(20px, calc((100vw - 1120px)/2)) 26px;
-  scroll-padding-inline: max(20px, calc((100vw - 1120px)/2))
+  padding: 30px max(20px, calc((100% - var(--svc-width))/2)) 42px;
+  scroll-padding-inline: 0
 }
 
 .track::-webkit-scrollbar {
   display: none
+}
+
+.track.is-moving {
+  scroll-snap-type: none
 }
 
 .track.drag {
@@ -637,8 +642,10 @@ nav a:hover {
 }
 
 .svc {
-  flex: 0 0 min(350px, 84vw);
-  scroll-snap-align: start;
+  flex: 0 0 var(--svc-width);
+  min-width: 0;
+  scroll-snap-align: center;
+  scale: .96;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -647,14 +654,31 @@ nav a:hover {
   border-radius: var(--r);
   color: var(--ink);
   background: var(--rose);
-  border: 1px solid transparent;
-  transition: box-shadow .3s
+  border: 2px solid transparent;
+  transition: scale .3s ease, box-shadow .3s, border-color .3s
+}
+
+.svc.is-active {
+  scale: 1.035;
+  z-index: 1;
+  box-shadow: 0 18px 34px #d8286033
+}
+
+/* La escala es independiente del transform de entrada e inclinación 3D. */
+#servicios .arrows {
+  display: flex
 }
 
 .svc-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr);
+  gap: 14px;
+  align-items: center;
+  /* Sube el conjunto ícono/título sin desplazar la descripción ni el botón. */
+  padding-bottom: 28px;
+  /* Reserva el alto que antes ocupaban el ícono y el título en dos filas. */
+  min-height: calc(56px + 22px + 4rem + 10px);
+  flex-shrink: 0
 }
 
 .svc-ico {
@@ -677,16 +701,11 @@ nav a:hover {
   stroke-linejoin: round
 }
 
-.svc .num {
-  font: 800 2.8rem/1 var(--serif);
-  font-style: italic;
-  opacity: .28
-}
-
 .svc h3 {
-  font-size: 2rem;
-  line-height: 1;
-  margin: 22px 0 10px;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  line-height: 1.1;
+  margin: 0;
+  overflow-wrap: anywhere;
   color: var(--brand-ink)
 }
 
@@ -717,7 +736,7 @@ nav a:hover {
 }
 
 .svc .btn {
-  align-self: flex-start
+  align-self: center
 }
 
 .svc:hover {
@@ -742,16 +761,16 @@ nav a:hover {
 }
 
 .svc.c4 {
-  background: var(--rose-soft);
-  border: 2px solid var(--brand)
+  background: var(--rose-soft)
 }
 
-/* En escritorio, títulos y descripciones reservan el mismo alto para que las viñetas queden alineadas entre tarjetas */
-@media (min-width:901px) {
-  .svc h3 {
-    min-height: 4rem
-  }
+/* El recuadro acompaña al servicio seleccionado, en lugar de quedar fijo en c4. */
+.track .svc.is-active {
+  border-color: var(--brand)
+}
 
+/* En escritorio, las descripciones reservan el mismo alto para alinear las viñetas. */
+@media (min-width:901px) {
   .svc p {
     min-height: 6.3em
   }
@@ -841,6 +860,71 @@ nav a:hover {
   border-radius: 16px;
   border: 1px solid var(--panel-line);
   transition: background .25s, transform .25s
+}
+
+.reel-groups {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px
+}
+
+.reel-group {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+  min-height: 64px;
+  padding: 12px 14px;
+  text-align: left;
+  font: 600 .95rem var(--sans);
+  color: var(--panel-fg);
+  background: transparent;
+  border: 1px solid var(--panel-line);
+  border-radius: 16px;
+  cursor: pointer;
+  overflow-wrap: anywhere;
+  transition: background .25s, border-color .25s
+}
+
+.reel-group[aria-pressed=true] {
+  border-color: var(--panel-ac);
+  background: var(--panel-ac);
+  color: var(--panel)
+}
+
+.reel-group .mono {
+  color: inherit;
+  opacity: .8
+}
+
+.reel-group:focus-visible {
+  outline: 3px solid var(--panel-ac);
+  outline-offset: 3px
+}
+
+.reel-heading {
+  margin: 16px 0 4px
+}
+
+.reel-items {
+  display: grid;
+  gap: 8px
+}
+
+.reel-placeholder {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(145deg, #56132e, #1b1819 65%);
+  color: #f07a9c;
+  font-size: 5rem
+}
+
+.phone-ctrl .dots {
+  min-width: 0;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 220px
 }
 
 .reel-item:hover {
@@ -970,8 +1054,13 @@ nav a:hover {
 
 .phone-ctrl {
   display: flex;
+  max-width: 100%;
   align-items: center;
   gap: 6px
+}
+
+.phone-ctrl > .tbtn {
+  flex-shrink: 0
 }
 
 .dots {
@@ -1156,9 +1245,24 @@ nav a:hover {
 
 .work {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: clamp(24px, 5vw, 56px);
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(28px, 4vw, 44px);
   align-items: start
+}
+
+.contact-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(24px, 5vw, 56px)
+}
+
+.contact-copy > p:last-child {
+  max-width: 50ch
+}
+
+.contact-intro .ways {
+  margin: 0
 }
 
 .ways {
@@ -1171,6 +1275,7 @@ nav a:hover {
 
 .ways a,
 .ways div {
+  overflow-wrap: anywhere;
   display: grid;
   gap: 2px;
   min-height: 60px;
@@ -1192,14 +1297,83 @@ nav a:hover {
 }
 
 .fcard {
+  min-width: 0;
   background: var(--rose-soft);
+  border: 1px solid #d8286033;
+  box-shadow: 0 20px 48px #b8164f14;
   border-radius: var(--r);
-  padding: 28px;
+  padding: clamp(22px, 3.5vw, 40px);
   display: grid;
-  gap: 16px
+  gap: 22px
+}
+
+.form-intro {
+  padding-bottom: 18px;
+  border-bottom: 1px solid #d8286033
+}
+
+.form-intro h3 {
+  font-size: clamp(1.7rem, 3vw, 2.2rem);
+  line-height: 1.1;
+  color: var(--brand-ink);
+  margin: 8px 0
+}
+
+.form-intro > p:last-child,
+.field-optional {
+  font-size: .85rem;
+  font-weight: 400
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+  align-items: start
+}
+
+.form-actions {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 28px;
+  align-items: center;
+  padding-top: 20px;
+  border-top: 1px solid #d8286033
+}
+
+.form-actions .form-note {
+  max-width: 65ch
+}
+
+.form-note,
+.form-status {
+  font-size: .85rem;
+  line-height: 1.6;
+  overflow-wrap: anywhere
+}
+
+.form-note a {
+  font-weight: 700;
+  text-underline-offset: 3px
+}
+
+.form-status:empty {
+  display: none
+}
+
+.form-status:not(:empty) {
+  padding: 12px 14px;
+  border-left: 3px solid var(--brand);
+  background: var(--rose)
+}
+
+.fcard .btn {
+  width: 100%;
+  justify-content: center
 }
 
 .fcard label {
+  min-width: 0;
   display: grid;
   gap: 6px;
   font-weight: 500;
@@ -1209,6 +1383,8 @@ nav a:hover {
 .fcard input,
 .fcard select,
 .fcard textarea {
+  width: 100%;
+  min-width: 0;
   font: inherit;
   font-size: 1rem;
   color: var(--ink);
@@ -1217,6 +1393,32 @@ nav a:hover {
   padding: 10px 14px;
   border-radius: 12px;
   border: 2px solid var(--brand)
+}
+
+.fcard textarea {
+  resize: vertical
+}
+
+.fcard input:focus-visible,
+.fcard select:focus-visible,
+.fcard textarea:focus-visible {
+  outline: 3px solid var(--brand-ink);
+  outline-offset: 3px
+}
+
+.foot-cta {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-top: 4px;
+  font-weight: 700;
+  color: var(--brand-ink);
+  text-underline-offset: 4px
+}
+
+.foot > * {
+  min-width: 0;
+  overflow-wrap: anywhere
 }
 
 /* Pie de página: marca · explorar · contacto, y una franja inferior con "volver arriba" */
@@ -1228,33 +1430,43 @@ footer {
 
 .foot {
   display: grid;
-  grid-template-columns: 1.5fr 1fr 1fr;
-  gap: 32px;
-  padding: 44px 0 28px;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 1fr);
+  align-items: start;
+  gap: clamp(20px, 3vw, 36px);
+  padding: 28px 0 20px;
   border-top: 1px solid #d8286033
 }
 
 .foot-logo {
-  height: 54px;
+  height: 46px;
   width: auto;
   background: #fff;
   border-radius: 99px;
-  padding: 6px 20px
+  padding: 5px 16px
 }
 
 .foot-brand p {
-  margin-top: 14px;
-  max-width: 34ch
+  margin-top: 10px;
+  max-width: 32ch;
+  font-size: .9rem;
+  line-height: 1.6
 }
 
 .foot .mono {
   opacity: .75;
-  margin-bottom: 6px
+  margin-bottom: 4px
 }
 
 .foot ul {
   list-style: none;
-  padding: 0
+  padding: 0;
+  margin: 0
+}
+
+.foot-links {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 12px
 }
 
 .foot ul a {
@@ -1262,7 +1474,8 @@ footer {
   align-items: center;
   min-height: 44px;
   text-decoration: none;
-  font-weight: 500
+  font-weight: 500;
+  font-size: .9rem
 }
 
 .foot ul a:hover {
@@ -1275,9 +1488,9 @@ footer {
   align-items: center;
   gap: 12px;
   flex-wrap: wrap;
-  padding: 16px 0 22px;
+  padding: 10px 0 14px;
   border-top: 1px solid #d8286033;
-  font-size: .9rem
+  font-size: .8rem
 }
 
 .top {
@@ -1552,8 +1765,7 @@ body::after {
   }
 }
 
-.logo:hover,
-.signature:hover {
+.logo:hover {
   animation: wiggle .6s
 }
 
@@ -1585,10 +1797,36 @@ body::after {
   margin: 0;
 }
 
-.signature {
-  width: min(220px, 55%);
+.btn-disco {
+  width: 100%;
+  min-width: 0;
+  min-height: 76px;
+  padding: 12px clamp(18px, 3vw, 30px);
+  gap: clamp(12px, 2vw, 20px);
+  background: var(--brand-grad);
+  border: 1px solid #ffffff40;
+  box-shadow: 0 8px 22px #d828601f;
+  text-align: center;
+  white-space: normal
+}
+
+.cv-download {
+  margin-top: clamp(26px, 4vw, 38px)
+}
+
+.btn-gradient {
+  background: var(--brand-grad)
+}
+
+.cv-disco {
+  width: clamp(42px, 5vw, 52px);
   height: auto;
-  margin-top: 22px
+  flex-shrink: 0;
+  transition: rotate .3s ease
+}
+
+.btn-disco:hover .cv-disco {
+  rotate: -8deg
 }
 
 html.js .w {
@@ -1629,7 +1867,7 @@ html.js .w.on {
   animation: shotIn .6s both
 }
 
-/* Botón flotante de WhatsApp: solo en móvil/tablet (ver 15). main.js le pone .show según el scroll. */
+/* Botón flotante de contacto: solo en móvil/tablet (ver 15). main.js le pone .show según el scroll. */
 .fab {
   position: fixed;
   right: 16px;
@@ -1673,6 +1911,14 @@ html.js .w.on {
                       560 px = móvil pequeño (secciones más compactas, filtros deslizables)
    (hover:none) = pantallas táctiles: se quitan los efectos hover que se "quedan pegados". */
 @media (max-width:900px) {
+  .contact-intro {
+    grid-template-columns: minmax(0, 1fr)
+  }
+
+  .contact-intro .ways {
+    grid-template-columns: repeat(2, minmax(0, 1fr))
+  }
+
 
   /* Menú: la lista de enlaces pasa a un panel desplegable bajo la barra */
   nav {
@@ -1875,13 +2121,21 @@ html.js .w.on {
 
   /* Pie de página */
   .foot {
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
-    padding: 36px 0 22px
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    padding: 24px 0 18px
   }
 
   .foot-brand {
-    grid-column: 1/-1
+    grid-column: 1/-1;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px 20px
+  }
+
+  .foot-brand p {
+    margin: 0
   }
 
   .foot-bottom {
@@ -1895,6 +2149,27 @@ html.js .w.on {
 }
 
 @media (max-width:560px) {
+  .foot {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px
+  }
+
+  .foot-contact ul {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 20px
+  }
+
+  .form-row,
+  .form-actions,
+  .contact-intro .ways {
+    grid-template-columns: minmax(0, 1fr)
+  }
+
+  .form-actions {
+    gap: 18px
+  }
+
   section {
     padding: 48px 0
   }
