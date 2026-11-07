@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<!--
+  PORTAFOLIO · Melissa Villatoro
+  ─────────────────────────────────────────────────────────────
+  Estructura del archivo (cada bloque está marcado con un comentario):
+    0. <head>        metadatos, tema anti-parpadeo, fuentes, CSS
+    1. Navegación    barra fija + botón de tema claro/oscuro
+    2. Hero          nombre, foto recortada, sello de experiencia
+    3. Sobre mí      foto, cifras y carrusel de marcas
+    4. Trayectoria   educación, experiencia y otros proyectos
+    5. Servicios     carrusel horizontal de tarjetas
+    6. Videografía   iPhone con los videos pasando en carrusel
+    7. Fotografía    galería con filtros (se llena desde js/main.js)
+    8. Testimonios   (se llena desde js/main.js)
+    9. Trabajemos    formulario que abre WhatsApp
+   10. Extras        canvas del glitter y diálogo de fotos
+  El contenido editable (videos, fotos, marcas, testimonios) vive en js/main.js.
+-->
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Melissa Villatoro | Editora y creadora de contenido</title>
+<meta name="description" content="Portafolio de Melissa Villatoro: edición de video, creación de contenido y fotografía para marcas en San Miguel, El Salvador.">
+<meta name="theme-color" content="#FFF1F4">
+<link rel="icon" href="images/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+
+<!-- Tema: se decide ANTES de pintar para que no haya parpadeo. Usa la elección guardada o, si no hay, la del sistema. -->
+<script>
+  document.documentElement.classList.add("js");
+  try {
+    var t = localStorage.getItem("theme") || (matchMedia("(prefers-color-scheme:dark)").matches ? "dark" : "light");
+    document.documentElement.dataset.theme = t;
+  } catch (e) { document.documentElement.dataset.theme = "light"; }
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@1,600;1,800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<script src="js/main.js" defer></script>
+</head>
+<body>
+<!-- 0 · INTRO: el logo se "escribe" de izquierda a derecha dejando glitter (solo la primera visita de la sesión) -->
+<div class="splash" id="splash" aria-hidden="true"><img src="images/logo.png" width="692" height="361" alt=""></div>
+<div class="progress" id="progress" aria-hidden="true"></div>
+<a class="skip" href="#main">Saltar al contenido</a>
+
+<!-- 1 · NAVEGACIÓN: anclas a cada sección; en móvil la lista se desplaza horizontalmente -->
+<nav aria-label="Principal">
+  <div class="wrap">
+    <a href="#inicio" aria-label="Inicio"><img class="logo" src="images/logo.png" width="692" height="361" alt="MV, logo de Melissa Villatoro"></a>
+    <ul id="navlinks">
+      <li><a href="#sobre-mi">Sobre mí</a></li>
+      <li><a href="#trayectoria">Trayectoria</a></li>
+      <li><a href="#servicios">Servicios</a></li>
+      <li><a href="#video">Videografía</a></li>
+      <li><a href="#fotografia">Fotografía</a></li>
+      <li><a href="#testimonios">Testimonios</a></li>
+      <li><a href="#contacto">Trabajemos</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button id="theme" class="tbtn" type="button" aria-label="Cambiar a modo oscuro"></button>
+      <button id="menuBtn" class="tbtn menu-btn" type="button" aria-expanded="false" aria-controls="navlinks" aria-label="Abrir menú">☰</button>
+    </div>
+  </div>
+</nav>
+
+<main id="main">
+
+<!-- 2 · HERO: el nombre grande es la "firma" visual; la foto (images/hero.png) lo solapa -->
+<header class="hero" id="inicio">
+  <div class="wrap">
+    <h1><span>Melissa</span><span>Villatoro.</span></h1>
+    <div class="hero-copy">
+      <p class="mono">Editora y creadora de contenido</p>
+      <p>Historias en video y foto que hacen que las marcas se vean como son: cercanas y en tendencia.</p>
+      <a class="btn" href="#video">Ver mi trabajo</a>
+      <a class="btn ghost" href="https://wa.me/50375440772?text=Hola%2C%20quiero%20contactarte%20desde%20tu%20portafolio">Escríbeme</a>
+    </div>
+    <div class="photo">
+      <div class="chip"><b>2</b><span class="mono">años de<br>experiencia</span></div>
+      <div class="sticker" aria-hidden="true"><img src="images/logo.png" alt=""></div>
+      <img src="images/hero.png" alt="Retrato de Melissa Villatoro" onerror="this.remove()">
+    </div>
+  </div>
+  <!-- Destellos decorativos que titilan (aria-hidden: no aportan información) -->
+  <i class="tw" aria-hidden="true" style="left:5%;top:14%">✦</i>
+  <i class="tw" aria-hidden="true" style="left:46%;top:9%;animation-delay:.8s;color:#EE7B30">✦</i>
+  <i class="tw" aria-hidden="true" style="right:6%;top:46%;animation-delay:1.5s">✦</i>
+  <i class="tw" aria-hidden="true" style="left:30%;bottom:10%;animation-delay:2s;color:#E4613C">✦</i>
+</header>
+
+<!-- 3 · SOBRE MÍ: el carrusel #brands se genera desde BRANDS en js/main.js -->
+<section id="sobre-mi">
+  <div class="wrap about" data-spark>
+    <figure class="about-photo">
+      <img src="images/about.jpg" alt="Retrato de Melissa Villatoro" onerror="this.remove()">
+    </figure>
+    <div class="about-body">
+      <p class="mono">Sobre mí</p>
+      <h2>Hola, soy Melissa.</h2>
+      <p>Soy editora y creadora de contenido en San Miguel. Estudio Comunicación Institucional y Periodismo, y me enfoco en publicidad digital y contenido en tendencia: desde la idea y el guion hasta la edición final.</p>
+      <ul class="stats">
+        <li><b data-n="4">4</b><span class="mono">años creando</span></li>
+        <li><b data-n="5">5</b><span class="mono">marcas aliadas</span></li>
+        <li><b data-n="3">3</b><span class="mono">Años de experiencia</span></li>
+      </ul>
+      <img class="signature" src="images/logo.png" width="692" height="361" alt="Firma MV" loading="lazy">
+    </div>
+    <div class="about-brands">
+      <p class="mono">He trabajado con</p>
+      <div class="marquee" id="brands" aria-label="Marcas con las que he trabajado"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 4 · TRAYECTORIA: tres tarjetas tipo bento -->
+<section id="trayectoria">
+  <div class="wrap">
+    <div class="head">
+      <h2>Mi trayectoria</h2>
+      <p>Estudiante de comunicaciones y periodismo, enfocada en publicidad digital y contenido en tendencia para redes sociales.</p>
+    </div>
+    <div class="bento">
+      <article class="card paper" data-spark>
+        <h3>Educación</h3>
+        <ol class="tl">
+          <li><span class="mono">2023 – Presente</span><strong>Licenciatura en Comunicación Institucional y Periodismo</strong><span>Universidad Gerardo Barrios, San Miguel</span></li>
+          <li><span class="mono">2022 – 2024</span><strong>Curso de inglés avanzado</strong><span>Construye tu futuro, San Miguel</span></li>
+        </ol>
+      </article>
+      <article class="card dark" data-spark>
+        <h3>Experiencia</h3>
+        <ol class="tl">
+          <li><span class="mono">2024 – Presente</span><strong>Shopping Center · Creadora de contenido</strong><span>Contenido audiovisual estratégico para redes sociales.</span></li>
+          <li><span class="mono">2024</span><strong>Grupo Lorena · Modelo de publicidad</strong><span>Campañas publicitarias y eventos de marca.</span></li>
+        </ol>
+      </article>
+      <article class="card pink" data-spark>
+        <h3>Otros proyectos</h3>
+        <ol class="tl">
+          <li><span class="mono">2025</span><strong>Mis Huellas, UGB · Voluntariado</strong><span>Vocera, creadora de contenido y coordinadora audiovisual.</span></li>
+          <li><span class="mono">2025</span><strong>Global Outsourcing · Contenido</strong><span>Material audiovisual para redes sociales.</span></li>
+        </ol>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- 5 · SERVICIOS: las tarjetas y las opciones del formulario se generan desde SERVICES en js/main.js.
+     Carrusel con scroll-snap: dedo, rueda, teclado, flechas y arrastre con mouse. -->
+<section id="servicios">
+  <div class="wrap">
+    <div class="head">
+      <div class="head-l">
+        <h2>Servicios</h2>
+        <p>Elige lo que necesitas o combínalos: armamos una propuesta a la medida de tu marca.</p>
+      </div>
+      <div class="arrows"><button id="prev" type="button" aria-label="Servicio anterior">←</button><button id="next" type="button" aria-label="Servicio siguiente">→</button></div>
+    </div>
+  </div>
+  <div class="track" id="track" tabindex="0" role="region" aria-roledescription="carrusel" aria-label="Servicios"></div>
+  <div class="wrap svc-foot">
+    <div class="dots" id="svcDots" aria-label="Posición en el carrusel"></div>
+    <a class="svc-note" href="#contacto">¿Algo distinto? Cuéntame tu idea →</a>
+  </div>
+</section>
+
+<!-- 6 · VIDEOGRAFÍA: lista a la izquierda, iPhone a la derecha.
+     Los videos (REELS en main.js) pasan DENTRO de la pantalla del teléfono. -->
+<section id="video" class="band">
+  <div class="wrap video">
+    <div class="video-copy">
+      <p class="mono">Videografía</p>
+      <h2>Contenido que se mueve.</h2>
+      <p>Formato vertical pensado para Reels y TikTok. Elige un video o desliza el teléfono; toca ▶ para verlo completo.</p>
+    </div>
+    <div class="reel-list" id="reelList"></div>
+
+    <div class="phone-stage">
+      <div class="phone-wrap" id="phone" data-spark>
+        <!-- Pantalla: carrusel horizontal de diapositivas (una por video) -->
+        <div class="screen" id="slides" tabindex="0" role="region" aria-roledescription="carrusel" aria-label="Videos"></div>
+
+        <!-- Marco de iPhone (SVG propio). El hueco de la pantalla se deja con un hueco;
+             los colores originales naranja se cambiaron al magenta del logo para distinguirlo. -->
+        <svg class="phone-frame" viewBox="0 0 79.2 163.5" aria-hidden="true" focusable="false">
+          <defs>
+            <linearGradient id="frame" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#F07A9C"/><stop offset=".5" stop-color="#D82860"/><stop offset="1" stop-color="#B8164F"/>
+            </linearGradient>
+</defs>
+          <!-- Botones laterales -->
+          <g fill="#C81E5A">
+            <rect x="0" y="30.7" width="1.6" height="7" rx=".4"/><rect x="0" y="42.8" width="1.6" height="11.2" rx=".4"/><rect x="0" y="57" width="1.6" height="11.2" rx=".4"/>
+            <rect x="77.6" y="46.6" width="1.6" height="17.8" rx=".4"/>
+          </g>
+          <!-- Tres capas con HUECO (fill-rule evenodd): por el hueco se ve el video que está detrás -->
+          <g fill-rule="evenodd">
+            <path d="M13.34 0H65.86A12.87 12.87 0 0 1 78.73 12.87V150.63A12.87 12.87 0 0 1 65.86 163.5H13.34A12.87 12.87 0 0 1 0.47 150.63V12.87A12.87 12.87 0 0 1 13.34 0ZM13.5 3.8H65.7A9.5 9.5 0 0 1 75.2 13.3V150.2A9.5 9.5 0 0 1 65.7 159.7H13.5A9.5 9.5 0 0 1 4 150.2V13.3A9.5 9.5 0 0 1 13.5 3.8Z" fill="url(#frame)"/>   <!-- cuerpo de color -->
+            <path d="M13.35 0.98H65.85A11.9 11.9 0 0 1 77.75 12.88V150.58A11.9 11.9 0 0 1 65.85 162.48H13.35A11.9 11.9 0 0 1 1.45 150.58V12.88A11.9 11.9 0 0 1 13.35 0.98ZM13.5 3.8H65.7A9.5 9.5 0 0 1 75.2 13.3V150.2A9.5 9.5 0 0 1 65.7 159.7H13.5A9.5 9.5 0 0 1 4 150.2V13.3A9.5 9.5 0 0 1 13.5 3.8Z" fill="#000"/>           <!-- aro negro -->
+            <path d="M13.34 2.46H65.84A10.4 10.4 0 0 1 76.24 12.86V150.66A10.4 10.4 0 0 1 65.84 161.06H13.34A10.4 10.4 0 0 1 2.94 150.66V12.86A10.4 10.4 0 0 1 13.34 2.46ZM13.5 3.8H65.7A9.5 9.5 0 0 1 75.2 13.3V150.2A9.5 9.5 0 0 1 65.7 159.7H13.5A9.5 9.5 0 0 1 4 150.2V13.3A9.5 9.5 0 0 1 13.5 3.8Z" fill="#333"/>           <!-- bisel -->
+          </g>
+          <!-- Dynamic Island y lente -->
+          <rect x="29.16" y="4.8" width="20.9" height="6.03" rx="3.01" fill="#050505"/>
+          <circle cx="47" cy="7.82" r="1.55" fill="#050505"/><circle cx="47" cy="7.82" r=".92" fill="#3600AE" opacity=".7"/>
+        </svg>
+      </div>
+
+      <div class="phone-ctrl">
+        <button id="vPrev" class="tbtn" type="button" aria-label="Video anterior">←</button>
+        <div class="dots" id="dots"></div>
+        <button id="vNext" class="tbtn" type="button" aria-label="Video siguiente">→</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 7 · FOTOGRAFÍA: filtros y galería se generan desde PHOTOS en main.js -->
+<section id="fotografia">
+  <div class="wrap">
+    <div class="head">
+      <h2>Fotografía</h2>
+      <p>Producto, moda y eventos. Filtra por categoría y toca una foto para ampliarla.</p>
+    </div>
+    <div class="filters" id="filters" role="group" aria-label="Filtrar fotografías"></div>
+    <div class="gallery" id="gallery"></div>
+  </div>
+</section>
+
+<!-- 8 · TESTIMONIOS: tarjetas generadas desde TESTI en main.js -->
+<section id="testimonios">
+  <div class="wrap">
+    <div class="head">
+      <h2>Testimonios</h2>
+      <p>Lo que dicen las marcas con las que he trabajado.</p>
+    </div>
+    <div class="quotes" id="quotes"></div>
+  </div>
+</section>
+
+<!-- 9 · TRABAJEMOS JUNTOS: el formulario arma un mensaje y abre WhatsApp (no requiere servidor) -->
+<section class="contact" id="contacto">
+  <div class="wrap work">
+    <div>
+      <p class="mono">Trabajemos juntos</p>
+      <h2>Hagamos algo juntas.</h2>
+      <p>Cuéntame de tu marca y qué quieres lograr. Te respondo por WhatsApp.</p>
+      <ul class="ways">
+        <li><a href="https://wa.me/50375440772?text=Hola%2C%20quiero%20contactarte%20desde%20tu%20portafolio"><span class="mono">WhatsApp</span><strong>Escríbeme directo</strong></a></li>
+        <li><a href="mailto:mellugh7@gmail.com"><span class="mono">Correo</span><strong>mellugh7@gmail.com</strong></a></li>
+        <li><div><span class="mono">Ubicación</span><strong>San Miguel, El Salvador</strong></div></li>
+      </ul>
+    </div>
+    <form id="form" class="fcard">
+      <label>Tu nombre<input name="n" required autocomplete="name"></label>
+      <label>Marca o proyecto<input name="b" autocomplete="organization"></label>
+      <label>¿Qué necesitas?
+        <select name="s" id="svc"></select>      </label>
+      <label>Cuéntame más<textarea name="m" rows="4"></textarea></label>
+      <button class="btn" type="submit">Enviar por WhatsApp</button>
+    </form>
+  </div>
+</section>
+</main>
+
+<!-- PIE DE PÁGINA: marca, exploración, contacto y "volver arriba" -->
+<footer>
+  <div class="wrap foot">
+    <div class="foot-brand">
+      <img class="foot-logo" src="images/logo.png" width="692" height="361" alt="MV" loading="lazy">
+      <p>Editora y creadora de contenido en San Miguel, El Salvador. Video, foto y estrategia para marcas que quieren verse como son.</p>
+    </div>
+    <div>
+      <p class="mono">Explorar</p>
+      <ul>
+        <li><a href="#sobre-mi">Sobre mí</a></li>
+        <li><a href="#servicios">Servicios</a></li>
+        <li><a href="#video">Videografía</a></li>
+        <li><a href="#fotografia">Fotografía</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="mono">Contacto</p>
+      <ul>
+        <li><a href="https://wa.me/50375440772?text=Hola%2C%20quiero%20contactarte%20desde%20tu%20portafolio">WhatsApp</a></li>
+        <li><a href="mailto:mellugh7@gmail.com">Correo</a></li>
+        <li><a href="#contacto">Formulario</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="wrap foot-bottom">
+    <span>© <span id="y">2026</span> Melissa Villatoro · Hecho con pasión y creatividad</span>
+    <button id="toTop" class="top" type="button">↑ Volver arriba</button>
+  </div>
+</footer>
+
+<!-- 10 · EXTRAS: lienzo del glitter (cubre la pantalla, no recibe clics) y diálogo de fotos -->
+<!-- Botón flotante de WhatsApp (solo móvil/tablet; se oculta al llegar al formulario) -->
+<a class="fab" id="fab" href="https://wa.me/50375440772?text=Hola%2C%20quiero%20contactarte%20desde%20tu%20portafolio" aria-label="Escribir por WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 01-11.6 7.1L4 20l1-4.7A8 8 0 1121 12z"/></svg><span>Escríbeme</span></a>
+<canvas id="gl" aria-hidden="true"></canvas>
+<dialog id="dlg" aria-label="Foto ampliada">
+  <button class="close" aria-label="Cerrar" id="x">✕</button>
+  <div id="stage"></div>
+  <div class="info" id="info"></div>
+</dialog>
+</body>
+</html>
